@@ -1,27 +1,27 @@
-import React from 'react';
-import { FaShoppingCart, FaUserCircle } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import { Navigate, NavLink, useNavigate, useParams } from 'react-router-dom';
-import { GetDetailProduct, GetKeranjang, PostBeli } from '../api/homeAPI';
-import logo from '../assets/images/logo.png';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
-import { DeleteKeranjang } from '../api/homeAPI';
-import { FaStar } from 'react-icons/fa';
-import { BsClockHistory } from 'react-icons/bs';
+import React from "react";
+import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { Navigate, NavLink, useNavigate, useParams } from "react-router-dom";
+import { GetDetailProduct, GetKeranjang, PostBeli } from "../api/homeAPI";
+import logo from "../assets/images/logo.png";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import { DeleteKeranjang } from "../api/homeAPI";
+import { FaStar } from "react-icons/fa";
+import { BsClockHistory } from "react-icons/bs";
 import {
   CardKeranjang,
   CustomButton,
   CustomInput,
   HargaBarang,
-} from '../components';
-import ScaleLoader from 'react-spinners/ScaleLoader';
-import { useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
-import { actionUbahItem } from '../redux/action/keranjangAction';
+} from "../components";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { actionUbahItem } from "../redux/action/keranjangAction";
 
 const Keranjang = () => {
-  const convertRupiah = require('rupiah-format');
+  const convertRupiah = require("rupiah-format");
   const navigate = useNavigate();
   const author = useSelector((state) => state.auth);
   let dispatch = useDispatch();
@@ -30,17 +30,17 @@ const Keranjang = () => {
   const [fetchProduct, setFetchProduct] = React.useState(false);
   const [status, setStatus] = React.useState(false);
   const [payload, setPayload] = React.useState({
-    data: '',
+    data: "",
   });
-  const [payloadTambah, setPayloadTambah] = React.useState({});
+  const [payloadTambah, setPayloadTambah] = React.useState();
   const getKeranjang = async () => {
     try {
       let response = await GetKeranjang();
-      console.log('responseKeranjang =>', response);
+      console.log("responseKeranjang =>", response);
       setProduct(response.data.data);
       setPayload(response.data);
     } catch (err) {
-      console.log('errGetKeranjang =>', err);
+      console.log("errGetKeranjang =>", err);
     } finally {
     }
   };
@@ -51,39 +51,39 @@ const Keranjang = () => {
       if (product.length === 0) {
         const Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: "top-end",
           showConfirmButton: false,
           timer: 2000,
           timerProgressBar: true,
           didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
           },
         });
 
         return Toast.fire({
-          icon: 'info',
-          title: 'Tidak ada barang dikeranjang',
+          icon: "info",
+          title: "Tidak ada barang dikeranjang",
         });
       } else {
         const response = await PostBeli(payload);
-        console.log('Beli =>', response);
+        console.log("Beli =>", response);
         getKeranjang();
         if (response.status === 201) {
           const Toast = Swal.mixin({
             toast: true,
-            position: 'top-end',
+            position: "top-end",
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
             didOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer);
-              toast.addEventListener('mouseleave', Swal.resumeTimer);
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
             },
           });
 
           Toast.fire({
-            icon: 'success',
+            icon: "success",
             title: response.data.msg,
           });
         }
@@ -98,10 +98,10 @@ const Keranjang = () => {
     // e.preventDefault();
     try {
       let response = await DeleteKeranjang(id);
-      console.log('hapusKeranjanghandle =>', response);
+      console.log("hapusKeranjanghandle =>", response);
       getKeranjang();
     } catch (err) {
-      console.log('hapusKeranjanghandle err =>', err);
+      console.log("hapusKeranjanghandle err =>", err);
     }
   };
 
@@ -110,7 +110,7 @@ const Keranjang = () => {
       getKeranjang();
       const response = await dispatch(actionUbahItem(payloadTambah));
       setPayloadTambah({ id: id, jumlah: jumlah });
-      console.log('itemTambah =>', response);
+      console.log("itemTambah =>", response);
     } catch (err) {
     } finally {
     }
@@ -119,26 +119,26 @@ const Keranjang = () => {
   React.useEffect(() => {
     getKeranjang();
   }, []);
-  console.log('product', product);
+  console.log("product", product);
   return (
     <section className="w-full">
       <header className="sticky top-0 z-50 w-full h-[80px] bg-[#395144] border-b-2 border-b-black drop-shadow-xl px-[50px] flex justify-between items-center">
         <section className="flex items-center">
-          <NavLink to={'/home'}>
+          <NavLink to={"/home"}>
             <img src={logo} alt="" className="w-[40px] " />
           </NavLink>
         </section>
 
         <section className="flex justify-between items-center space-x-7">
           <div className="flex items-center space-x-5">
-            <NavLink to={'/keranjang'}>
+            <NavLink to={"/keranjang"}>
               <FaShoppingCart
                 color="ffffff"
                 size={20}
                 className="cursor-pointer"
               />
             </NavLink>
-            <NavLink to={'/histori-pembelian'}>
+            <NavLink to={"/histori-pembelian"}>
               <BsClockHistory
                 color="ffffff"
                 size={20}
@@ -170,13 +170,20 @@ const Keranjang = () => {
               const obj = JSON.parse(json);
 
               const increment = () => {
-                tambahItem(item?.id, item?.jumlah + 1);
-
-                getKeranjang();
+                if (item.jumlah === -1) {
+                  return;
+                } else {
+                  tambahItem(item.id, item.jumlah + 1);
+                  // getKeranjang();
+                } 
               };
               const decrement = () => {
-                tambahItem(item?.id, item?.jumlah - 1);
-                getKeranjang();
+                if (item.jumlah <= 1) {
+                  return hapusKeranjanghandle(item.id);
+                } else {
+                  tambahItem(item.id, item.jumlah - 1);
+                  // getKeranjang();
+                }
               };
               return (
                 <section
@@ -203,7 +210,7 @@ const Keranjang = () => {
                               Stok tersisa: {item.produk.stok}
                             </p>
                             <p className="text-white font-semibold text-[16px]">
-                              {convertRupiah.convert(item.produk.harga)} ×{' '}
+                              {convertRupiah.convert(item.produk.harga)} ×{" "}
                               {item.jumlah}
                             </p>
                           </div>
@@ -277,7 +284,7 @@ const Keranjang = () => {
                       <p className="text-white  font-semibold text-][18px]">
                         {
                           <HargaBarang
-                            style={'text-[18px]'}
+                            style={"text-[18px]"}
                             harga={convertRupiah.convert(
                               item?.produk?.harga * item?.jumlah
                             )}
@@ -293,10 +300,10 @@ const Keranjang = () => {
             <div>
               <CustomButton
                 onClick={buyHandle}
-                label={'BELI SEKARANG'}
-                stylingButton={'w-full hover:bg-white hover:border-white'}
+                label={"BELI SEKARANG"}
+                stylingButton={"w-full hover:bg-white hover:border-white"}
                 stylingText={
-                  'font-mono font-semibold tracking-widest text-[18px] hover:text-[#395144]'
+                  "font-mono font-semibold tracking-widest text-[18px] hover:text-[#395144]"
                 }
               />
             </div>

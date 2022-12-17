@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const client = axios.create({
-    baseURL: "http://34.128.70.114",
+    baseURL: "https://sainuu.xyz",
   
     headers: {
       Accept: "application/json",
@@ -23,7 +23,7 @@ const client = axios.create({
   
         clearToken();
         localStorage.clear();
-        window.location.replace("/login");
+        // window.location.replace("/login");
       } else {
         return Promise.reject(error);
       }
